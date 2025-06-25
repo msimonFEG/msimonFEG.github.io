@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication Problems</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #4ecdc4 0%, #26d0ce 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-links {
+            margin-bottom: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .generate-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .problems-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .problem {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .problem:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .problem-number {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .math-expression {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .answer-input:focus {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .problems-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links a {
+                display: block;
+                margin: 5px 0;
+                text-align: center;
+            }
+            
+            .generate-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>✖️ Multiplication Problems</h1>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="addition.html">➕ Addition</a>
+        </div>
+        <button class="generate-btn" onclick="generateProblems()">🎲 Generate New Problems</button>
+    </div>
+
+    <div class="problems-container" id="problemsContainer">
+        <!-- Problems will be generated here -->
+    </div>
+
+    <script>
+        function generateRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function generateProblems() {
+            const container = document.getElementById('problemsContainer');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= 10; i++) {
+                const num1 = generateRandomNumber(1, 12);
+                const num2 = generateRandomNumber(1, 12);
+                const answer = num1 * num2;
+
+                const problemDiv = document.createElement('div');
+                problemDiv.className = 'problem';
+                problemDiv.innerHTML = `
+                    <div class="problem-number">Problem ${i}</div>
+                    <div class="math-expression">${num1} × ${num2} = ?</div>
+                    <input type="number" class="answer-input" placeholder="Your answer..." 
+                           onchange="checkAnswer(this, ${answer})" data-answer="${answer}">
+                `;
+
+                container.appendChild(problemDiv);
+            }
+        }
+
+        function checkAnswer(input, correctAnswer) {
+            const userAnswer = parseInt(input.value);
+            if (userAnswer === correctAnswer) {
+                input.style.backgroundColor = '#d4edda';
+                input.style.borderColor = '#28a745';
+            } else if (input.value !== '') {
+                input.style.backgroundColor = '#f8d7da';
+                input.style.borderColor = '#dc3545';
+            } else {
+                input.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                input.style.borderColor = '';
+            }
+        }
+
+        // Generate initial problems when page loads
+        window.onload = function() {
+            generateProblems();
+        };
+    </script>
+</body>
+</html>
