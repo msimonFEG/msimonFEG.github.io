@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Addition and Subtraction Problems</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-links {
+            margin-bottom: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .controls-section {
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .controls-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .range-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-group label {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .range-input {
+            width: 100%;
+            max-width: 150px;
+            padding: 10px;
+            font-size: 1.1rem;
+            text-align: center;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .range-input:focus {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        .generate-btn {
+            background: linear-gradient(45deg, #4ecdc4, #26d0ce);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .problems-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .problem {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .problem:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .problem-number {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .math-expression {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .answer-input:focus {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        .current-range {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .problems-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .nav-links a {
+                display: block;
+                margin: 5px 0;
+                text-align: center;
+            }
+            
+            .generate-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .range-controls {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>➕➖ Addition and Subtraction of Positive and Negative Numbers</h1>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="multiplication.html">✖️ Multiplication</a>
+        </div>
+    </div>
+
+    <div class="controls-section">
+        <div class="controls-title">🎛️ Problem Settings</div>
+        <div class="range-controls">
+            <div class="input-group">
+                <label for="minValue">Minimum Number:</label>
+                <input type="number" id="minValue" class="range-input" value="-20" placeholder="-20">
+            </div>
+            <div class="input-group">
+                <label for="maxValue">Maximum Number:</label>
+                <input type="number" id="maxValue" class="range-input" value="20" placeholder="20">
+            </div>
+        </div>
+        <div class="current-range" id="currentRange">
+            Current range: -20 to 20
+        </div>
+        <button class="generate-btn" onclick="generateProblems()">🎲 Generate New Problems</button>
+    </div>
+
+    <div class="problems-container" id="problemsContainer">
+        <!-- Problems will be generated here -->
+    </div>
+
+    <script>
+        function updateRangeDisplay() {
+            const minValue = document.getElementById('minValue').value || -20;
+            const maxValue = document.getElementById('maxValue').value || 20;
+            document.getElementById('currentRange').textContent = `Current range: ${minValue} to ${maxValue}`;
+        }
+
+        function generateRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function generateProblems() {
+            const minValue = parseInt(document.getElementById('minValue').value) || -20;
+            const maxValue = parseInt(document.getElementById('maxValue').value) || 20;
+            
+            if (minValue >= maxValue) {
+                alert('Minimum value must be less than maximum value!');
+                return;
+            }
+
+            updateRangeDisplay();
+            
+            const container = document.getElementById('problemsContainer');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= 10; i++) {
+                const num1 = generateRandomNumber(minValue, maxValue);
+                const num2 = generateRandomNumber(minValue, maxValue);
+                const isAddition = Math.random() < 0.5;
+                
+                // Format numbers with parentheses for negatives
+                const formatNumber = (num) => num < 0 ? `(${num})` : num;
+                
+                let expression, answer;
+                if (isAddition) {
+                    expression = `${formatNumber(num1)} + ${formatNumber(num2)}`;
+                    answer = num1 + num2;
+                } else {
+                    expression = `${formatNumber(num1)} - ${formatNumber(num2)}`;
+                    answer = num1 - num2;
+                }
+
+                const problemDiv = document.createElement('div');
+                problemDiv.className = 'problem';
+                problemDiv.innerHTML = `
+                    <div class="problem-number">Problem ${i}</div>
+                    <div class="math-expression">${expression} = ?</div>
+                    <input type="number" class="answer-input" placeholder="Your answer..." 
+                           onchange="checkAnswer(this, ${answer})" data-answer="${answer}">
+                `;
+
+                container.appendChild(problemDiv);
+            }
+        }
+
+        function checkAnswer(input, correctAnswer) {
+            const userAnswer = parseInt(input.value);
+            if (userAnswer === correctAnswer) {
+                input.style.backgroundColor = '#d4edda';
+                input.style.borderColor = '#28a745';
+            } else if (input.value !== '') {
+                input.style.backgroundColor = '#f8d7da';
+                input.style.borderColor = '#dc3545';
+            } else {
+                input.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                input.style.borderColor = '';
+            }
+        }
+
+        // Add event listeners for range inputs
+        document.getElementById('minValue').addEventListener('input', updateRangeDisplay);
+        document.getElementById('maxValue').addEventListener('input', updateRangeDisplay);
+
+        // Generate initial problems when page loads
+        window.onload = function() {
+            updateRangeDisplay();
+            generateProblems();
+        };
+    </script>
+</body>
+</html>
