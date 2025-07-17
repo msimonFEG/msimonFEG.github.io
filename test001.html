@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Test - Version 1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', serif;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Print-specific styles */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+                font-size: 14pt;
+            }
+            
+            .page-break {
+                page-break-after: always;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .test-header {
+                margin-bottom: 40px;
+            }
+            
+            .problem-page {
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 2in;
+            }
+        }
+
+        /* Screen styles */
+        .controls-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 2px solid #dee2e6;
+            margin-bottom: 30px;
+        }
+
+        .controls-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #495057;
+        }
+
+        .control-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+
+        .control-input {
+            padding: 8px 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 1rem;
+            text-align: center;
+            width: 120px;
+        }
+
+        .control-input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .generate-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .generate-btn:hover {
+            background: #0056b3;
+        }
+
+        .print-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .print-btn:hover {
+            background: #1e7e34;
+        }
+
+        .test-container {
+            max-width: 8.5in;
+            margin: 0 auto;
+        }
+
+        .problem-page {
+            background: white;
+            min-height: 11in;
+            width: 8.5in;
+            margin: 0 auto 20px auto;
+            padding: 1in;
+            border: 1px solid #dee2e6;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-header {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+
+        .test-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .test-info {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .problem-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .problem-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #495057;
+        }
+
+        .math-expression {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 60px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+        }
+
+        .answer-line {
+            width: 300px;
+            height: 3px;
+            background: #333;
+            margin: 20px 0;
+        }
+
+        .answer-space {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .page-footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            border-top: 1px solid #dee2e6;
+            padding-top: 10px;
+        }
+
+        .page-break {
+            /* This will be handled by CSS print styles */
+        }
+
+        @media screen and (max-width: 768px) {
+            .problem-page {
+                width: 100%;
+                min-height: 100vh;
+                margin-bottom: 10px;
+            }
+            
+            .control-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="controls-section no-print">
+        <div class="controls-title">📝 Math Test Generator</div>
+        <div class="control-group">
+            <div class="input-group">
+                <label for="numProblems">Number of Problems:</label>
+                <input type="number" id="numProblems" class="control-input" value="10" min="1" max="50">
+            </div>
+            <div class="input-group">
+                <label for="minValue">Minimum Number:</label>
+                <input type="number" id="minValue" class="control-input" value="1">
+            </div>
+            <div class="input-group">
+                <label for="maxValue">Maximum Number:</label>
+                <input type="number" id="maxValue" class="control-input" value="20">
+            </div>
+            <div class="input-group">
+                <label for="operationType">Operation Type:</label>
+                <select id="operationType" class="control-input">
+                    <option value="addition">Addition Only</option>
+                    <option value="subtraction">Subtraction Only</option>
+                    <option value="mixed">Addition & Subtraction</option>
+                    <option value="multiplication">Multiplication Only</option>
+                </select>
+            </div>
+        </div>
+        <div class="control-group">
+            <button class="generate-btn" onclick="generateTest()">🎲 Generate Test</button>
+            <button class="print-btn" onclick="printTest()">🖨️ Print Test</button>
+        </div>
+    </div>
+
+    <div class="test-container" id="testContainer">
+        <!-- Test problems will be generated here -->
+    </div>
+
+    <script>
+        function generateRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function formatNumber(num) {
+            return num < 0 ? `(${num})` : num;
+        }
+
+        function generateTest() {
+            const numProblems = parseInt(document.getElementById('numProblems').value) || 10;
+            const minValue = parseInt(document.getElementById('minValue').value) || 1;
+            const maxValue = parseInt(document.getElementById('maxValue').value) || 20;
+            const operationType = document.getElementById('operationType').value;
+            
+            if (minValue >= maxValue) {
+                alert('Minimum value must be less than maximum value!');
+                return;
+            }
+
+            const container = document.getElementById('testContainer');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= numProblems; i++) {
+                const num1 = generateRandomNumber(minValue, maxValue);
+                const num2 = generateRandomNumber(minValue, maxValue);
+                
+                let expression, answer, operation;
+                
+                if (operationType === 'addition') {
+                    expression = `${formatNumber(num1)} + ${formatNumber(num2)}`;
+                    answer = num1 + num2;
+                    operation = 'addition';
+                } else if (operationType === 'subtraction') {
+                    expression = `${formatNumber(num1)} - ${formatNumber(num2)}`;
+                    answer = num1 - num2;
+                    operation = 'subtraction';
+                } else if (operationType === 'multiplication') {
+                    expression = `${formatNumber(num1)} × ${formatNumber(num2)}`;
+                    answer = num1 * num2;
+                    operation = 'multiplication';
+                } else { // mixed
+                    const isAddition = Math.random() < 0.5;
+                    if (isAddition) {
+                        expression = `${formatNumber(num1)} + ${formatNumber(num2)}`;
+                        answer = num1 + num2;
+                        operation = 'addition';
+                    } else {
+                        expression = `${formatNumber(num1)} - ${formatNumber(num2)}`;
+                        answer = num1 - num2;
+                        operation = 'subtraction';
+                    }
+                }
+
+                const problemPage = document.createElement('div');
+                problemPage.className = 'problem-page';
+                if (i < numProblems) {
+                    problemPage.classList.add('page-break');
+                }
+                
+                problemPage.innerHTML = `
+                    <div class="test-header">
+                        <div class="test-title">Math Test</div>
+                        <div class="test-info">Name: _________________ Date: _________</div>
+                    </div>
+                    <div class="problem-content">
+                        <div class="problem-number">Problem ${i}</div>
+                        <div class="math-expression">${expression} = ?</div>
+                        <div class="answer-space">
+                            <div class="answer-line"></div>
+                            Answer
+                        </div>
+                    </div>
+                    <div class="page-footer">
+                        Page ${i} of ${numProblems}
+                    </div>
+                `;
+
+                container.appendChild(problemPage);
+            }
+        }
+
+        function printTest() {
+            window.print();
+        }
+
+        // Generate initial test when page loads
+        window.onload = function() {
+            generateTest();
+        };
+    </script>
+</body>
+</html>
