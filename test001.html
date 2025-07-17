@@ -145,6 +145,13 @@
             flex-direction: column;
             justify-content: space-between;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .title-page {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
 
         .test-header {
@@ -169,44 +176,48 @@
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding-top: 0;
         }
 
         .problem-number {
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: bold;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             color: #495057;
         }
 
         .math-expression {
-            font-size: 3rem;
+            font-size: 2rem;
             font-weight: bold;
-            margin-bottom: 60px;
-            text-align: center;
+            margin-bottom: 40px;
+            text-align: left;
             font-family: 'Courier New', monospace;
         }
 
         .answer-line {
-            width: 300px;
-            height: 3px;
-            background: #333;
-            margin: 20px 0;
+            width: 200px;
+            height: 2px;
+            background: #666;
+            margin: 15px 0;
         }
 
         .answer-space {
-            text-align: center;
-            font-size: 1.2rem;
-            color: #666;
+            text-align: left;
+            font-size: 1rem;
+            color: #888;
         }
 
         .page-footer {
             text-align: center;
-            font-size: 0.9rem;
-            color: #666;
-            border-top: 1px solid #dee2e6;
-            padding-top: 10px;
+            font-size: 0.8rem;
+            color: #999;
+            padding-top: 5px;
+            position: absolute;
+            bottom: 0.5in;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .page-break {
@@ -286,6 +297,21 @@
             const container = document.getElementById('testContainer');
             container.innerHTML = '';
 
+            // Create title page
+            const titlePage = document.createElement('div');
+            titlePage.className = 'problem-page title-page page-break';
+            titlePage.innerHTML = `
+                <div class="test-header">
+                    <div class="test-title">Math Test</div>
+                    <div class="test-info">Name: _________________ Date: _________</div>
+                </div>
+                <div class="page-footer">
+                    Title Page
+                </div>
+            `;
+            container.appendChild(titlePage);
+
+            // Create problem pages
             for (let i = 1; i <= numProblems; i++) {
                 const num1 = generateRandomNumber(minValue, maxValue);
                 const num2 = generateRandomNumber(minValue, maxValue);
@@ -324,10 +350,6 @@
                 }
                 
                 problemPage.innerHTML = `
-                    <div class="test-header">
-                        <div class="test-title">Math Test</div>
-                        <div class="test-info">Name: _________________ Date: _________</div>
-                    </div>
                     <div class="problem-content">
                         <div class="problem-number">Problem ${i}</div>
                         <div class="math-expression">${expression} = ?</div>
@@ -337,7 +359,7 @@
                         </div>
                     </div>
                     <div class="page-footer">
-                        Page ${i} of ${numProblems}
+                        Page ${i + 1} of ${numProblems + 1}
                     </div>
                 `;
 
