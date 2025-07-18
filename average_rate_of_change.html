@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quadratic Average Rate of Change Test Generator</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .generate-btn {
+            display: block;
+            margin: 0 auto 30px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .generate-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .problem {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            height: 720px; /* 10 inches at 72 DPI */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .problem-number {
+            font-weight: bold;
+            font-size: 11px;
+            margin-bottom: 15px;
+        }
+        
+        .problem-directions {
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .problem-area {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .graph-container {
+            margin-right: 15px;
+        }
+        
+        .graph {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #333;
+        }
+        
+        .multiple-choice {
+            font-size: 12px;
+            margin-top: 15px;
+        }
+        
+        .choice {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Average Rate of Change for Quadratic Functions</h1>
+        <button class="generate-btn" onclick="generateProblems()">Generate Problems</button>
+        <div id="problems-container"></div>
+    </div>
+
+    <script>
+        function generateProblems() {
+            const container = document.getElementById('problems-container');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= 10; i++) {
+                const problem = generateProblem(i);
+                container.appendChild(problem);
+            }
+        }
+        
+        function generateProblem(problemNumber) {
+            const problemDiv = document.createElement('div');
+            problemDiv.className = 'problem';
+            
+            // Generate random coefficients
+            const a = Math.floor(Math.random() * 3) + 1; // 1 to 3
+            const c = Math.floor(Math.random() * 8) - 7; // -7 to 0
+            
+            // Generate random interval
+            const intervalLength = Math.floor(Math.random() * 2) + 2; // 2 to 3
+            const x1 = Math.floor(Math.random() * 7) - 3; // -3 to 3
+            const x2 = x1 + intervalLength;
+            
+            // Ensure x2 is within bounds
+            const finalX2 = Math.min(x2, 3);
+            const finalX1 = Math.max(x1, -3);
+            
+            // Calculate average rate of change
+            const f_x1 = a * finalX1 * finalX1 + c;
+            const f_x2 = a * finalX2 * finalX2 + c;
+            const correctAnswer = (f_x2 - f_x1) / (finalX2 - finalX1);
+            
+            // Create problem content
+            problemDiv.innerHTML = `
+                <div class="problem-number">Problem ${problemNumber}</div>
+                <div class="problem-directions">
+                    For the function shown below, f(x) = ${formatFunction(a, c)}, identify the average rate of change over the interval [${finalX1},${finalX2}]
+                </div>
+                <div class="problem-area">
+                    <div class="graph-container">
+                        <svg class="graph" viewBox="0 0 300 300">
+                            ${drawGraph(a, c)}
+                        </svg>
+                    </div>
+                </div>
+                <div class="multiple-choice">
+                    ${generateChoices(correctAnswer)}
+                </div>
+            `;
+            
+            return problemDiv;
+        }
+        
+        function formatFunction(a, c) {
+            let functionStr = '';
+            
+            if (a === 1) {
+                functionStr = 'x²';
+            } else {
+                functionStr = `${a}x²`;
+            }
+            
+            if (c > 0) {
+                functionStr += ` + ${c}`;
+            } else if (c < 0) {
+                functionStr += ` - ${Math.abs(c)}`;
+            }
+            
+            return functionStr;
+        }
+        
+        function drawGraph(a, c) {
+            let svg = '';
+            
+            // Grid lines
+            for (let i = 0; i <= 22; i++) {
+                const x = i * 300 / 22;
+                svg += `<line x1="${x}" y1="0" x2="${x}" y2="300" stroke="#e0e0e0" stroke-width="0.5"/>`;
+                const y = i * 300 / 22;
+                svg += `<line x1="0" y1="${y}" x2="300" y2="${y}" stroke="#e0e0e0" stroke-width="0.5"/>`;
+            }
+            
+            // Axes
+            svg += '<line x1="150" y1="0" x2="150" y2="300" stroke="#333" stroke-width="1"/>';
+            svg += '<line x1="0" y1="150" x2="300" y2="150" stroke="#333" stroke-width="1"/>';
+            
+            // Axis labels (every 5 intervals)
+            for (let i = 0; i <= 22; i += 5) {
+                const pixel = i * 300 / 22;
+                const value = i - 11;
+                if (value !== 0) {
+                    svg += `<text x="${pixel}" y="145" text-anchor="middle" font-size="8">${value}</text>`;
+                    svg += `<text x="155" y="${pixel + 3}" text-anchor="middle" font-size="8">${11 - i}</text>`;
+                }
+            }
+            
+            // Draw parabola
+            let pathData = 'M';
+            for (let pixel = 0; pixel <= 300; pixel += 2) {
+                const x = (pixel / 300) * 22 - 11; // Convert pixel to x-coordinate
+                const y = a * x * x + c;
+                const yPixel = 150 - (y * 300 / 22); // Convert y to pixel, inverted
+                
+                if (yPixel >= 0 && yPixel <= 300) {
+                    pathData += `${pixel},${yPixel} `;
+                }
+            }
+            
+            svg += `<path d="${pathData}" stroke="blue" stroke-width="2" fill="none"/>`;
+            
+            return svg;
+        }
+        
+        function generateChoices(correctAnswer) {
+            const choices = [correctAnswer];
+            
+            // Generate 3 incorrect answers
+            while (choices.length < 4) {
+                let incorrect;
+                if (Math.random() < 0.5) {
+                    // Generate integer incorrect answer
+                    incorrect = Math.floor(Math.random() * 27) - 13;
+                } else {
+                    // Generate fraction incorrect answer
+                    const numerator = Math.floor(Math.random() * 27) - 13;
+                    const denominator = Math.floor(Math.random() * 10) + 1;
+                    incorrect = numerator / denominator;
+                }
+                
+                // Ensure it's different from correct answer and other choices
+                if (!choices.some(choice => Math.abs(choice - incorrect) < 0.01)) {
+                    choices.push(incorrect);
+                }
+            }
+            
+            // Shuffle choices
+            for (let i = choices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [choices[i], choices[j]] = [choices[j], choices[i]];
+            }
+            
+            let choicesHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            
+            choices.forEach((choice, index) => {
+                const formattedChoice = formatChoice(choice);
+                choicesHTML += `<div class="choice">${letters[index]}. ${formattedChoice}</div>`;
+            });
+            
+            return choicesHTML;
+        }
+        
+        function formatChoice(value) {
+            // Check if it's close to an integer
+            if (Math.abs(value - Math.round(value)) < 0.01) {
+                return Math.round(value).toString();
+            }
+            
+            // Try to express as a simple fraction
+            const tolerance = 0.01;
+            for (let denominator = 2; denominator <= 10; denominator++) {
+                const numerator = Math.round(value * denominator);
+                if (Math.abs(value - numerator / denominator) < tolerance) {
+                    return `${numerator}/${denominator}`;
+                }
+            }
+            
+            // Return as decimal rounded to 2 places
+            return value.toFixed(2);
+        }
+        
+        // Generate initial problems
+        generateProblems();
+    </script>
+</body>
+</html>
