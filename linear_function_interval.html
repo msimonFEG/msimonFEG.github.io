@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Inequality Test Generator</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .generate-btn {
+            display: block;
+            margin: 0 auto 30px;
+            padding: 12px 24px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .generate-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .problem {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            height: 720px; /* 10 inches at 72dpi */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .problem-number {
+            font-weight: bold;
+            font-size: 11px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .problem-directions {
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 20px;
+            color: #333;
+            line-height: 1.4;
+        }
+        
+        .multiple-choice {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .choice {
+            margin-bottom: 10px;
+            padding: 5px 0;
+        }
+        
+        .choice-letter {
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Linear Inequality Test Generator</h1>
+        <button class="generate-btn" onclick="generateTest()">Generate New Test</button>
+        <div id="test-container"></div>
+    </div>
+
+    <script>
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        
+        function getRandomNonZero(min, max) {
+            let num;
+            do {
+                num = getRandomInt(min, max);
+            } while (num === 0);
+            return num;
+        }
+        
+        function gcd(a, b) {
+            a = Math.abs(a);
+            b = Math.abs(b);
+            while (b !== 0) {
+                let temp = b;
+                b = a % b;
+                a = temp;
+            }
+            return a;
+        }
+        
+        function simplifyFraction(num, den) {
+            if (den === 0) return "undefined";
+            if (num === 0) return "0";
+            
+            let g = gcd(num, den);
+            num /= g;
+            den /= g;
+            
+            if (den < 0) {
+                num = -num;
+                den = -den;
+            }
+            
+            if (den === 1) return num.toString();
+            return num + "/" + den;
+        }
+        
+        function formatCoefficient(coef, isFirst = false) {
+            if (coef === 1) return isFirst ? "" : "+";
+            if (coef === -1) return "-";
+            if (coef > 0 && !isFirst) return "+" + coef;
+            return coef.toString();
+        }
+        
+        function formatLinearFunction(a, b, variable = "x") {
+            let result = "";
+            
+            // Handle coefficient of x
+            if (a === 1) {
+                result = variable;
+            } else if (a === -1) {
+                result = "-" + variable;
+            } else {
+                result = a + variable;
+            }
+            
+            // Handle constant term
+            if (b > 0) {
+                result += "+" + b;
+            } else if (b < 0) {
+                result += b;
+            }
+            
+            return result;
+        }
+        
+        function generateProblem(problemNum) {
+            const a = getRandomNonZero(-13, 13);
+            const b = getRandomInt(-13, 13);
+            const variable = "x";
+            const functionName = "g";
+            
+            // Calculate root: ax + b = 0 => x = -b/a
+            const rootNum = -b;
+            const rootDen = a;
+            const rootFraction = simplifyFraction(rootNum, rootDen);
+            
+            // Determine intervals based on sign of coefficient 'a'
+            let positiveInterval, negativeInterval;
+            if (a > 0) {
+                // Function is positive when x > root, negative when x < root
+                positiveInterval = `(${rootFraction}, ∞)`;
+                negativeInterval = `(-∞, ${rootFraction})`;
+            } else {
+                // Function is positive when x < root, negative when x > root
+                positiveInterval = `(-∞, ${rootFraction})`;
+                negativeInterval = `(${rootFraction}, ∞)`;
+            }
+            
+            const correctAnswer = `positive: ${positiveInterval}; negative: ${negativeInterval}`;
+            
+            // Generate incorrect answers
+            const incorrectAnswers = generateIncorrectAnswers(rootFraction, a, b);
+            
+            // Shuffle answers
+            const allAnswers = [correctAnswer, ...incorrectAnswers];
+            shuffleArray(allAnswers);
+            
+            const functionExpression = formatLinearFunction(a, b, variable);
+            
+            return {
+                number: problemNum,
+                directions: `Consider ${functionName}(${variable}) = ${functionExpression}. For what interval(s) is ${functionName}(${variable}) positive? negative?`,
+                choices: allAnswers.map((answer, index) => ({
+                    letter: String.fromCharCode(65 + index),
+                    text: answer
+                }))
+            };
+        }
+        
+        function generateIncorrectAnswers(correctRoot, a, b) {
+            const incorrectAnswers = [];
+            
+            // Generate some alternative roots using problem numbers
+            const alternativeRoots = [];
+            
+            // Use coefficients as potential roots
+            if (a !== 0) alternativeRoots.push(a.toString());
+            if (b !== 0) alternativeRoots.push(b.toString());
+            
+            // Create fractions using problem numbers
+            if (a !== 0 && b !== 0) {
+                alternativeRoots.push(simplifyFraction(a, b));
+                alternativeRoots.push(simplifyFraction(b, a));
+            }
+            
+            // Add some integer values from the range
+            const extraNumbers = [5, -5, 12, -12, 1, -1];
+            extraNumbers.forEach(num => {
+                if (num !== parseInt(correctRoot)) {
+                    alternativeRoots.push(num.toString());
+                }
+            });
+            
+            // Remove duplicates and the correct root
+            const uniqueRoots = [...new Set(alternativeRoots)].filter(root => root !== correctRoot);
+            
+            // Generate incorrect answers with these roots
+            for (let i = 0; i < Math.min(3, uniqueRoots.length); i++) {
+                const wrongRoot = uniqueRoots[i];
+                
+                // Sometimes flip the intervals
+                if (i === 0) {
+                    // Swap positive and negative intervals
+                    if (a > 0) {
+                        incorrectAnswers.push(`positive: (-∞, ${wrongRoot}); negative: (${wrongRoot}, ∞)`);
+                    } else {
+                        incorrectAnswers.push(`positive: (${wrongRoot}, ∞); negative: (-∞, ${wrongRoot})`);
+                    }
+                } else if (i === 1) {
+                    // Use wrong root but correct pattern
+                    if (a > 0) {
+                        incorrectAnswers.push(`positive: (${wrongRoot}, ∞); negative: (-∞, ${wrongRoot})`);
+                    } else {
+                        incorrectAnswers.push(`positive: (-∞, ${wrongRoot}); negative: (${wrongRoot}, ∞)`);
+                    }
+                } else {
+                    // Use closed intervals instead of open
+                    if (a > 0) {
+                        incorrectAnswers.push(`positive: [${wrongRoot}, ∞); negative: (-∞, ${wrongRoot}]`);
+                    } else {
+                        incorrectAnswers.push(`positive: (-∞, ${wrongRoot}]; negative: [${wrongRoot}, ∞)`);
+                    }
+                }
+            }
+            
+            return incorrectAnswers;
+        }
+        
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        
+        function generateTest() {
+            const container = document.getElementById('test-container');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= 10; i++) {
+                const problem = generateProblem(i);
+                
+                const problemDiv = document.createElement('div');
+                problemDiv.className = 'problem';
+                
+                problemDiv.innerHTML = `
+                    <div class="problem-number">Problem ${problem.number}</div>
+                    <div class="problem-directions">${problem.directions}</div>
+                    <div class="multiple-choice">
+                        ${problem.choices.map(choice => 
+                            `<div class="choice">
+                                <span class="choice-letter">${choice.letter}.</span>${choice.text}
+                            </div>`
+                        ).join('')}
+                    </div>
+                `;
+                
+                container.appendChild(problemDiv);
+            }
+        }
+        
+        // Generate initial test
+        generateTest();
+    </script>
+</body>
+</html>
