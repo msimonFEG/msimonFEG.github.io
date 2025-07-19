@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piecewise Generator</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .generate-btn {
+            display: block;
+            margin: 0 auto 30px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .generate-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .problem {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            height: 720px; /* 10 inches at 72 DPI */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .problem-number {
+            font-weight: bold;
+            font-size: 11px;
+            margin-bottom: 15px;
+        }
+        
+        .problem-directions {
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .problem-area {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .graph-container {
+            margin-right: 15px;
+        }
+        
+        .graph {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #333;
+        }
+        
+        .multiple-choice {
+            font-size: 12px;
+            margin-top: 15px;
+        }
+        
+        .choice {
+            height: 80px;
+            /* margin-bottom: 8px; */
+        }
+
+        /* from piecewise function div */
+        .piecewise-container {
+            background: white;
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 10px;
+            height: 50px;
+        }
+
+        .function-name {
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .brace-container {
+            display: flex;
+            align-items: stretch;
+            height: 30px;
+            width: 20px;
+
+        }
+
+        .brace {
+            font-size: 30px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            color: #333;
+            transform: scaleX(0.3);
+            /* transform-origin: left center; */
+            padding-bottom: 10px;
+        }
+
+        .expressions {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            height: 10px;
+            transform: translateY(-20px); /* Adjust -10px for the desired upward movement */
+
+        }
+
+        .expression-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 3px 0;
+        }
+
+        .math-expression {
+            font-weight: normal;
+        }
+
+        .inequality {
+            font-weight: normal;
+            color: #666;
+        }
+
+        .comma {
+            margin-right: 10px;
+        }
+
+        /* Styling for mathematical elements */
+        .coefficient {
+            /* font-style: italic; */
+        }
+
+        .variable {
+            font-style: italic;
+        }
+
+        .constant {
+            font-weight: normal;
+        }
+        
+        .point {
+            fill: #2563eb;
+        }
+        
+        .open-point {
+            fill: white;
+            stroke: #2563eb;
+            stroke-width: 2;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Piecewise Generator</h1>
+        <button class="generate-btn" onclick="generateProblems()">Generate Problems</button>
+        <div id="problems-container"></div>
+    </div>
+
+    <script>
+        function generateProblems() {
+            const container = document.getElementById('problems-container');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= 10; i++) {
+                const problem = generateProblem(i);
+                container.appendChild(problem);
+            }
+        }
+        
+        function generateProblem(problemNumber) {
+            const problemDiv = document.createElement('div');
+            problemDiv.className = 'problem';
+            
+            // Generate random endpoints
+            const a = Math.floor(Math.random() * 3) + -6; // -9 to -3
+            const b = Math.ceil(Math.random() * 2) + 2 + a;
+            const c = Math.ceil(Math.random() * 2) + 2 + b;
+            const d = Math.ceil(Math.random() * 2) + 2 + c;
+            
+            // Generate top function constant
+            const y1 = (Math.random() > 0.5 ? -1:1) * Math.ceil(Math.random() * 7); 
+            
+            // Generate linear expression and y values
+            let middleCoefficient = (Math.random() < 0.5 ? -1: 1) * Math.ceil(Math.random() * 3); 
+            while (y1 === middleCoefficient*b) {
+                console.log(`${middleCoefficient} ${y1} ${middleCoefficient*b}`);
+                
+                middleCoefficient = (Math.random() < 0.5 ? -1: 1) * Math.ceil(Math.random() * 2);
+            }
+            const y2 = middleCoefficient*b;
+            const y3 = middleCoefficient*c;
+            
+            // Generate linear binomial expression and y values
+            let bottomCoefficient = (Math.random() < 0.5 ? -1: 1) * Math.ceil(Math.random() * 2); 
+            let bottomConstant = (Math.random() < 0.5 ? -1: 1) * Math.ceil(Math.random() * 3); 
+            
+            while (bottomCoefficient === 0 || bottomCoefficient*c + bottomConstant === y3) {
+                bottomCoefficient = (Math.random() < 0.5 ? -1: 1) * Math.ceil(Math.random() * 2); 
+                bottomConstant = (Math.random() < 0.5 ? -1: 1) * Math.ceil(Math.random() * 3); 
+            }
+
+            const y4 = bottomCoefficient*c + bottomConstant;
+            const y5 = bottomCoefficient*d + bottomConstant;
+
+            // Generate ordered pairs.
+            const orderedPairs = [[a, y1],[b, y2],[c, y3],[c, y4],[d,y5]]
+
+            // General inequalities. Qualities sharing, same X values cannot be "less than or equal" inequalities.
+            let inequalities = {
+                a: Math.random() < 0.5, // True means "less than or equal"
+                b: Math.random() < 0.5,
+                // c: !b,
+                d: Math.random() < 0.5,
+                // e: !d,
+                f: Math.random() < 0.5
+            }
+            inequalities.c = !inequalities.b
+            inequalities.e = !inequalities.d
+
+            const width = 300;
+            const height = 300;
+            
+            const correctAnswer = {
+                topFunction: {
+                    topConstant: y1,
+                    endPoints: {
+                        left: a,
+                        right: b
+                    }
+                },
+                middleFunction: {
+                    middleCoefficient: middleCoefficient,
+                    endPoints: {
+                        left: b,
+                        right: c
+                    }
+                },                 
+                bottomFunction: {
+                    bottomCoefficient: bottomCoefficient,
+                    bottomConstant: bottomConstant,
+                    endPoints: {
+                        left: c,
+                        right: d
+                    }
+                },
+                inequalities: inequalities
+            };
+
+            
+            // Create problem content
+            problemDiv.innerHTML = `
+                <div class="problem-number">Problem ${problemNumber}</div>
+                <div class="problem-directions">
+                    Write the rule that defines the function in the graph shown.
+                </div>
+                <div class="problem-area">
+                    <div class="graph-container">
+                        <svg class="graph" viewBox="0 0 ${width} ${height}">
+                            ${drawGraph(width, height, orderedPairs, inequalities)}
+                        </svg>
+                    </div>
+                </div>
+                <div class="multiple-choice">
+                    ${generateChoices(correctAnswer)}
+
+                </div>
+            `;
+            
+            return problemDiv;
+        }
+        
+        function formatFunction(a, c) {
+            let functionStr = '';
+            
+            if (a === 1) {
+                functionStr = 'x²';
+            } else {
+                functionStr = `${a}x²`;
+            }
+            
+            if (c > 0) {
+                functionStr += ` + ${c}`;
+            } else if (c < 0) {
+                functionStr += ` - ${Math.abs(c)}`;
+            }
+            
+            return functionStr;
+        }
+        
+        // Draw graph - parameters will be end points of
+
+        function drawGraph(width, height, orderedPairs, inequalities) {
+            let svg = '';
+            const DOMAIN = 22
+            const RANGE = 22
+            const CENTER_X = width/2;
+            const CENTER_Y = height/2;
+            
+            // Grid lines
+            for (let i = 0; i <= DOMAIN; i++) {
+                const x = i * width / DOMAIN;
+                svg += `<line x1="${x}" y1="0" x2="${x}" y2="300" stroke="#e0e0e0" stroke-width="0.5"/>`;
+                
+            }
+            for (let i = 0; i <= RANGE; i++) {
+                
+                const y = i * 300 / RANGE;
+                svg += `<line x1="0" y1="${y}" x2="${width}" y2="${y}" stroke="#e0e0e0" stroke-width="0.5"/>`;
+            }
+            
+            // Axes
+            svg += `<line x1="${CENTER_X}" y1="0" x2="${CENTER_X}" y2="300" stroke="#333" stroke-width="1"/>`;
+            svg += `<line x1="0" y1="${CENTER_Y}" x2="${width}" y2="${CENTER_Y}" stroke="#333" stroke-width="1"/>`;
+            
+            // FUTURE - change every 5 intervals to a variable.
+            // Axis labels (every 5 intervals)
+            for (let i = 0; i <= DOMAIN; i += 5) {
+                const pixel = i * width / DOMAIN + 13;
+                const value = i - DOMAIN/2 +1;
+                if (value !== 0 ) {
+                    
+                    svg += `<text x="${pixel}" y="145" text-anchor="middle" font-size="8">${value}</text>`;
+                    // svg += `<text x="155" y="${pixel + 3}" text-anchor="middle" font-size="8">${11 - i}</text>`;
+                }
+            }
+            for (let i = 0; i <= DOMAIN; i += 5) {
+                const pixel = i * width / DOMAIN + 13;
+                const value = i - DOMAIN/2 +1;
+                if (value !== 0 ) {
+                    
+                    // svg += `<text x="${pixel}" y="145" text-anchor="middle" font-size="8">${value}</text>`;
+                    svg += `<text x="155" y="${pixel + 3}" text-anchor="middle" font-size="8">${10 - i}</text>`;
+                }
+            }
+            
+            // Draw Line
+            // svg += `<line x1="100" y1="330" x2="340" y2="330" stroke="blue" stroke-width="2"/>`
+            console.log(orderedPairs[0][0]);
+            console.log(orderedPairs[1][0]);
+            
+            svg += `<line x1="${CENTER_X + orderedPairs[0][0] * width / DOMAIN}" y1="${CENTER_Y - orderedPairs[0][1] * height / RANGE}" x2="${CENTER_X + orderedPairs[1][0] * width / DOMAIN}" y2="${CENTER_Y - orderedPairs[0][1] * height / RANGE}" stroke="#00f" stroke-width="2.1"/>`;
+            svg += `<line x1="${CENTER_X + orderedPairs[1][0] * width / DOMAIN}" y1="${CENTER_Y - orderedPairs[1][1] * height / RANGE}" x2="${CENTER_X + orderedPairs[2][0] * width / DOMAIN}" y2="${CENTER_Y - orderedPairs[2][1] * height / RANGE}" stroke="#00f" stroke-width="2.1"/>`;
+            svg += `<line x1="${CENTER_X + orderedPairs[3][0] * width / DOMAIN}" y1="${CENTER_Y - orderedPairs[3][1] * height / RANGE}" x2="${CENTER_X + orderedPairs[4][0] * width / DOMAIN}" y2="${CENTER_Y - orderedPairs[4][1] * height / RANGE}" stroke="#00f" stroke-width="2.1"/>`;
+
+                            // <!-- Closed point at (2, -6) - end of first piece -->
+
+            svg += inequalities.a ? `<circle cx="${CENTER_X + orderedPairs[0][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[0][1] * height / RANGE}" r="3" class="point" />` : `<circle cx="${CENTER_X + orderedPairs[0][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[0][1] * height / RANGE}" r="3" class="open-point" />`
+            svg += inequalities.b ? `<circle cx="${CENTER_X + orderedPairs[1][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[0][1] * height / RANGE}" r="3" class="point" />` : `<circle cx="${CENTER_X + orderedPairs[1][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[0][1] * height / RANGE}" r="3" class="open-point" />`
+            svg += inequalities.c ? `<circle cx="${CENTER_X + orderedPairs[1][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[1][1] * height / RANGE}" r="3" class="point" />` : `<circle cx="${CENTER_X + orderedPairs[1][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[1][1] * height / RANGE}" r="3" class="open-point" />`
+            svg += inequalities.d ? `<circle cx="${CENTER_X + orderedPairs[2][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[2][1] * height / RANGE}" r="3" class="point" />` : `<circle cx="${CENTER_X + orderedPairs[2][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[2][1] * height / RANGE}" r="3" class="open-point" />`
+            svg += inequalities.e ? `<circle cx="${CENTER_X + orderedPairs[3][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[3][1] * height / RANGE}" r="3" class="point" />` : `<circle cx="${CENTER_X + orderedPairs[3][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[3][1] * height / RANGE}" r="3" class="open-point" />`
+            svg += inequalities.f ? `<circle cx="${CENTER_X + orderedPairs[4][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[4][1] * height / RANGE}" r="3" class="point" />` : `<circle cx="${CENTER_X + orderedPairs[4][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[4][1] * height / RANGE}" r="3" class="open-point" />`
+                
+                // <!-- Open point at (2, 4) - start of second piece (not included) -->
+            // let pathData = 'M';
+            
+            // svg += `<path d="${pathData}" stroke="blue" stroke-width="2" fill="none"/>`;
+
+            
+            // // Draw parabola
+            // let pathData = 'M';
+            // for (let pixel = 0; pixel <= 300; pixel += 2) {
+            //     const x = (pixel / 300) * 22 - 11; // Convert pixel to x-coordinate
+            //     const y = a * x * x + c;
+            //     const yPixel = 150 - (y * 300 / 22); // Convert y to pixel, inverted
+                
+            //     if (yPixel >= 0 && yPixel <= 300) {
+            //         pathData += `${pixel},${yPixel} `;
+            //     }
+            // }
+            
+            // svg += `<path d="${pathData}" stroke="blue" stroke-width="2" fill="none"/>`;
+            
+            return svg;
+        }
+        
+        // function generateChoices() {
+        function generateChoices(correctAnswer) {
+            const choices = [correctAnswer];
+            console.log(correctAnswer);
+            
+            // Generate 3 incorrect answers
+            while (choices.length < 4) {
+                const a = correctAnswer.topFunction.endPoints.left + Math.floor(Math.random()* 4)+2;
+                const b = correctAnswer.middleFunction.endPoints.left + Math.floor(Math.random()* 4)+2;
+                const c = correctAnswer.middleFunction.endPoints.right + Math.floor(Math.random()* 4)+2;
+                const d = correctAnswer.bottomFunction.endPoints.right + Math.floor(Math.random()* 4)+2;
+
+                const incorrect = {
+                    topFunction: {
+                    topConstant: correctAnswer.topFunction.topConstant + (Math.random() < 0.5 ? -1 : 1) * Math.ceil(Math.random() * 3),
+                    endPoints: {
+                        left: a,
+                        right: b
+                    }
+                },
+                middleFunction: {
+                    middleCoefficient: correctAnswer.middleFunction.middleCoefficient + Math.random() < 0.5 ? -1 : 1 * Math.floor(Math.random() * 2),
+                    endPoints: {
+                        left: b,
+                        right: c
+                    }
+                },                 
+                bottomFunction: {
+                    bottomCoefficient:  Math.random() < 0.5 ? -1 : 1 * Math.ceil(Math.random() * 3),
+                    bottomConstant: correctAnswer.bottomFunction.bottomConstant + Math.random() < 0.5 ? -1 : 1 * Math.floor(Math.random() * 2),
+                    endPoints: {
+                        left: c,
+                        right: d
+                    }
+                },
+                inequalities: {
+                    a: Math.random() < 0.5, // True means "less than or equal"
+                    b: Math.random() < 0.5,
+                    c: !b,
+                    d: Math.random() < 0.5,
+                    e: !d,
+                    f: Math.random() < 0.5
+                }
+                };
+                choices.push(incorrect);
+            }
+
+
+            
+            // Shuffle choices
+            for (let i = choices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [choices[i], choices[j]] = [choices[j], choices[i]];
+            }
+
+            // generate HTML for each choice
+            
+            let choicesHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            
+            choices.forEach((choice, index) => {
+                const formattedChoice = formatChoice(choice);
+                choicesHTML += `<div class="choice">${letters[index]}. ${formattedChoice}</div>`;
+            });
+            
+            return choicesHTML;
+
+            // `<div class="choice">${letters[index]}. ${formattedChoice}</div>`
+            
+            // return `<div class="choice">a. x</div>`;
+        }
+        
+        function formatChoice(value) {
+            return `<div class="piecewise-container">
+    <div class="function-name">f(x)</div>
+    
+    <div class="brace-container">
+        <div class="brace">{</div>
+    </div>
+    
+    <div class="expressions">
+        <div class="expression-row">
+            <span class="math-expression">
+                <span class="constant">${value.topFunction.topConstant}</span><span class="comma">,</span>
+            </span>
+            <span class="inequality">${value.topFunction.endPoints.left} ${value.inequalities.a ? "≤" : "<"} <span class="variable">x</span> ${value.inequalities.b ? "≤" : "<"} ${value.topFunction.endPoints.right}</span>
+        </div>
+        
+        <div class="expression-row">
+            <span class="math-expression">
+                <span class="coefficient">${value.middleFunction.middleCoefficient}</span><span class="variable">x</span><span class="comma">,</span>
+            </span>
+            <span class="inequality">${value.middleFunction.endPoints.left} ${value.inequalities.c ? "≤" : "<"} <span class="variable">x</span> ${value.inequalities.d ? "≤" : "<"} ${value.middleFunction.endPoints.right}</span>
+        </div>
+        
+        <div class="expression-row">
+            <span class="math-expression">
+                <span class="coefficient">${value.bottomFunction.bottomCoefficient}</span><span class="variable">x</span> + ${value.bottomFunction.bottomConstant}<span class="comma">,</span>
+            </span>
+            <span class="inequality">${value.bottomFunction.endPoints.left} ${value.inequalities.e ? "≤" : "<"} <span class="variable">x</span> ${value.inequalities.f ? "≤" : "<"} ${value.bottomFunction.endPoints.right}</span>
+        </div>
+    </div>
+</div>
+`
+        }
+        
+        // Generate initial problems
+        generateProblems();
+    </script>
+</body>
+</html>
