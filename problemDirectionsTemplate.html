@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem Directions Template</title>
+    <style>
+        /* from recursive  */
+        .math-definition {
+            font-family: 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 2;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .math {
+            font-style: italic;
+            color: #2c3e50;
+        }
+
+        .math .number {
+            font-style: normal;
+            font-weight: normal;
+        }
+
+        .english {
+            font-style: normal;
+            color: #34495e;
+            margin: 0 8px;
+        }
+
+        .definition-line {
+            margin-bottom: 12px;
+        }
+
+        .definition-line:last-child {
+            margin-bottom: 0;
+        }
+
+        sub {
+            font-size: 0.8em;
+            vertical-align: sub;
+        }
+
+        sup {
+            font-size: 0.8em;
+            vertical-align: super;
+        }
+
+        /* From Mathematical Notation in HTML/CSS from Claude */
+        .math-container {
+            font-family: 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .math {
+            font-style: italic;
+            display: inline-block;
+        }
+
+        .english {
+            font-style: normal;
+            font-weight: normal;
+        }
+
+        .fraction {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            margin: 0 4px;
+        }
+
+        .numerator {
+            display: block;
+            border-bottom: 2px solid black;
+            padding-bottom: 2px;
+            margin-bottom: 2px;
+        }
+
+        .denominator {
+            display: block;
+            padding-top: 2px;
+        }
+
+        .superscript {
+            font-size: 0.7em;
+            vertical-align: super;
+            line-height: 0;
+        }
+
+        .number {
+            font-style: normal;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Problem Directions Template</h1>
+    <div class="problem-directions">
+        <div class="math-definition">
+            <div class="definition-line">
+                <span class="math">
+                    <span class="math">a</span><sub class="math">n</sub> = <span class="number">6</span>
+                </span>
+                <span class="english">when</span>
+                <span class="math">
+                    <span class="math">n</span> = <span class="number">1</span>
+                </span>
+            </div>
+
+            <div class="definition-line">
+                <span class="math">
+                    <span class="math">a</span><sub class="math">n</sub> = <span class="math">a</span><sub
+                        class="math">n</sub><sub>-<span class="number">1</span></sub> + <span class="number">6</span>
+                </span>
+                <span class="english">when</span>
+                <span class="math">
+                    <span class="math">n</span> > <span class="number">1</span>
+                </span>
+            </div>
+
+            <div class="definition-line">
+                <span class="math">
+                    <span class="math">f</span>(<span class="math">x</span>) = <span class="math">x</span><sup
+                        class="number">2</sup> + <span class="number">3</span>
+                </span>
+                <span class="english">when</span>
+                <span class="math">
+                    <span class="math">x</span> ≥ <span class="number">0</span>
+                </span>
+            </div>
+
+            <div class="definition-line">
+                <span class="math">
+                    <span class="math">b</span><sub class="math">i</sub><sup class="math">j</sup> = <span
+                        class="math">a</span><sub class="math">i</sub> · <span class="math">c</span><sup
+                        class="math">j</sup><sub class="number">2</sub>
+                </span>
+                <span class="english">when</span>
+                <span class="math">
+                    <span class="math">i</span>, <span class="math">j</span> > <span class="number">0</span>
+                </span>
+            </div>
+
+            <div class="definition-line">
+                <span class="math">
+                    <sup class="number">3</sup>⁄<sub class="number">4</sub><span class="math">x</span><sup
+                        class="number">2</sup> + <sup class="number">1</sup>⁄<sub class="number">2</sub><span
+                        class="math">x</span> - <span class="number">2</span> = <sup class="number">5</sup>⁄<sub
+                        class="number">3</sub><span class="math">y</span> + <span class="number">7</span>
+                </span>
+                <span class="english">when</span>
+                <span class="math">
+                    <span class="math">x</span>, <span class="math">y</span> ∈ ℝ
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="problem-directions">
+        <div class="math-definition">
+            <div class="definition-line">
+                <span class="math">
+                    <span class="math">a</span><sub class="math">n</sub> = <span class="number">6</span>
+                </span>
+                <span class="english">when</span>
+                <span class="math">
+                    <span class="math">n</span> = <span class="number">1</span>
+                </span>
+            </div>
+
+            <div class="definition-line">
+                <span class="math">
+                    <span class="math">a</span><sub class="math">n</sub> = <span class="math">a</span><sub
+                        class="math">n</sub><sub>-<span class="number">1</span></sub> + <span class="number">6</span>
+                </span>
+                <span class="english">when</span>
+                <span class="math">
+                    <span class="math">n</span> > <span class="number">1</span>
+                </span>
+            </div>
+
+            <div class="definition-line">
+                <span class="math">
+                    <span class="math">f</span>(<span class="math">x</span>) = <span class="math">x</span><sup
+                        class="number">2</sup> + <span class="number">3</span>
+                </span>
+                <span class="english">when</span>
+                <span class="math">
+                    <span class="math">x</span> ≥ <span class="number">0</span>
+                </span>
+            </div>
+
+            <div class="definition-line">
+                <span class="math">
+                    <span class="math">b</span><sub class="math">i</sub><sup class="math">j</sup> = <span
+                        class="math">a</span><sub class="math">i</sub> · <span class="math">c</span><sup
+                        class="math">j</sup><sub class="number">2</sub>
+                </span>
+                <span class="english">when</span>
+                <span class="math">
+                    <span class="math">i</span>, <span class="math">j</span> > <span class="number">0</span>
+                </span>
+            </div>
+
+            <div class="definition-line">
+                <span class="math">
+                    <sup class="number">3</sup>⁄<sub class="number">4</sub><span class="math">x</span><sup
+                        class="number">2</sup> + <sup class="number">1</sup>⁄<sub class="number">2</sub><span
+                        class="math">x</span> - <span class="number">2</span> = <sup class="number">5</sup>⁄<sub
+                        class="number">3</sub><span class="math">y</span> + <span class="number">7</span>
+                </span>
+                <span class="english">when</span>
+                <span class="math">
+                    <span class="math">x</span>, <span class="math">y</span> ∈ ℝ
+                </span>
+            </div>
+
+            <div class="defintion-line">
+                <span class="math">
+                    <span class="fraction">
+                        <span class="numerator"><span class="number">3</span>,<span class="number">5</span></span>
+                        <span class="denominator">x<span class="superscript number">2</span></span>
+                    </span>
+                </span>
+    
+                <span class="english"> if and only if or when </span>
+    
+                <span class="math">
+                    <span class="fraction">
+                        <span class="numerator">x<span class="superscript number">2</span></span>
+                        <span class="denominator">x<span class="superscript number">2</span> - <span
+                                class="number">2</span>x - <span class="number">9</span></span>
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+
+</html>
