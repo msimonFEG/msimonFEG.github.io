@@ -396,7 +396,7 @@
 
 
             a_1 = Math.ceil(Math.random() * 9);
-            d = Math.ceil(Math.random() * 9);
+            d = (Math.random() < 0.5 ? -1: 1) * Math.ceil(Math.random() * 9);
 
             const correctAnswer = {
                 a_1: a_1,
