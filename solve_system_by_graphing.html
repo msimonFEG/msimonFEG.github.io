@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solve System by Graphing</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .generate-btn {
+            display: block;
+            margin: 0 auto 30px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .generate-btn:hover {
+            background-color: #45a049;
+        }
+
+        .problem {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            height: 1000px;
+            /* 10 inches at 72 DPI */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .problem-number {
+            font-weight: bold;
+            font-size: 11px;
+            margin-bottom: 15px;
+        }
+
+        .problem-directions {
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+
+        .problem-area {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .graph-container {
+            margin-right: 15px;
+        }
+
+        .graph {
+            width: 150px;
+            height: 150px;
+            border: 1px solid #333;
+        }
+
+        .multiple-choice {
+            font-size: 12px;
+            margin-top: 15px;
+        }
+
+        .choice {
+            height: 188px;
+            /* margin-bottom: 8px; */
+        }
+
+        /* from piecewise function div */
+        .piecewise-container {
+            background: white;
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 10px;
+            height: 50px;
+        }
+
+        .function-name {
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .brace-container {
+            display: flex;
+            align-items: stretch;
+            height: 30px;
+            width: 20px;
+
+        }
+
+        .brace {
+            font-size: 30px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            color: #333;
+            transform: scaleX(0.3);
+            /* transform-origin: left center; */
+            padding-bottom: 10px;
+        }
+
+        .expressions {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            height: 10px;
+            transform: translateY(-20px);
+            /* Adjust -10px for the desired upward movement */
+
+        }
+
+        .expression-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 3px 0;
+        }
+
+        .math-expression {
+            font-weight: normal;
+        }
+
+        .inequality {
+            font-weight: normal;
+            color: #666;
+        }
+
+        .comma {
+            margin-right: 10px;
+        }
+
+        /* Styling for mathematical elements */
+        .coefficient {
+            /* font-style: italic; */
+        }
+
+        .variable {
+            font-style: italic;
+        }
+
+        .constant {
+            font-weight: normal;
+        }
+
+        .point {
+            fill: #2563eb;
+        }
+
+        .open-point {
+            fill: white;
+            stroke: #2563eb;
+            stroke-width: 2;
+        }
+
+        .problem-area .math-definition {
+            font-family: 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 2;
+            padding: 4px 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 12px;
+        }
+
+        .problem-area .math {
+            font-style: italic;
+            color: #2c3e50;
+        }
+
+        .problem-area .math .number {
+            font-style: normal;
+            font-weight: normal;
+        }
+
+        .problem-area .english {
+            font-style: normal;
+            color: #34495e;
+            margin: 0 8px;
+        }
+
+        .problem-area .definition-line {
+            margin-bottom: 12px;
+        }
+
+        .problem-area .definition-line:last-child {
+            margin-bottom: 0;
+        }
+
+        .problem-area sub {
+            font-size: 0.8em;
+            vertical-align: sub;
+        }
+
+        .problem-area sup {
+            font-size: 0.8em;
+            vertical-align: super;
+        }
+
+        /* From Mathematical Notation in HTML/CSS from Claude */
+        /* .problem-area .math-container {
+            font-family: 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        } */
+
+        .problem-area .math {
+            font-style: italic;
+            display: inline-block;
+        }
+
+        .problem-area .english {
+            font-style: normal;
+            font-weight: normal;
+        }
+
+        .problem-area .fraction {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            margin: 0 4px;
+        }
+
+        .problem-area .numerator {
+            display: block;
+            border-bottom: 2px solid black;
+            padding-bottom: 2px;
+            margin-bottom: 2px;
+        }
+
+        .problem-area .denominator {
+            display: block;
+            padding-top: 2px;
+        }
+
+        .problem-area .superscript {
+            font-size: 0.7em;
+            vertical-align: super;
+            line-height: 0;
+        }
+
+        .problem-area .number {
+            font-style: normal;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Solve System by Graphing</h1>
+        <button class="generate-btn" onclick="generateProblems()">Generate Problems</button>
+        <div id="problems-container"></div>
+    </div>
+    
+    <script>
+        function generateProblems() {
+            const container = document.getElementById('problems-container');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= 10; i++) {
+                const problem = generateProblem(i);
+                container.appendChild(problem);
+            }
+        }
+        
+        function generateProblem(problemNumber) {
+            const problemDiv = document.createElement('div');
+            problemDiv.className = 'problem';
+            
+            // Set Size for Graphs
+            const width = 150;
+            const height = 150;
+
+
+            // Generate slopes and y-intercepts
+            const m1 = (Math.random() < 0.5 ? -1 : 1) * Math.ceil(Math.random() * 3);
+            let m2 = (Math.random() < 0.5 ? -1 : 1) * Math.ceil(Math.random() * 3);
+            while (m2 === m1) { m2 = (Math.random() < 0.5 ? -1 : 1) * Math.ceil(Math.random() * 3); }
+            const b1 = (Math.random() < 0.5 ? -1 : 1) * Math.ceil(Math.random() * 5);
+            let b2 = (Math.random() < 0.5 ? -1 : 1) * Math.ceil(Math.random() * 5);
+            while (b2 === b1) { b2 = (Math.random() < 0.5 ? -1 : 1) * Math.ceil(Math.random() * 5); }
+
+            // a(x) = b(y) + c 
+            // d(x) - e(y) = f 
+            const a = m1;
+            const b = 1;
+            const c = -b1;
+            const d = 2 * m2;
+            const e = -2;
+            const f = -2 * b2;
+
+            // Generate ordered pairs for plotting using limits of the graph (-11, 11)
+            // y1a left most end point in the graph for first equation
+            // y1b right most end point in the graph for first equation
+            // y2a left most end point in the graph for first equation
+            // y1b right most end point in the graph for first equation
+            // x1a left most end point in the graph for first equation
+            // x1b right most end point in the graph for first equation
+            // x2a left most end point in the graph for first equation
+            // x1b right most end point in the graph for first equation
+            let y1a = 0;
+            let y1b = 0;
+            let y2a = 0;
+            let y2b = 0;
+
+            if (m1 * -11 + b1 < 11 && m1 * -11 + b1 > -11) {
+                y1a = m1 * -11 + b1;
+                x1a = -11;
+            } else {
+                if (m1 > 0) {
+                    y1a = -11;
+                    x1a = (-11 - b1) / m1;
+                } else {
+                    y1a = 11;
+                    x1a = (11 - b1) / m1;
+                }
+            }
+            if (m2 * -11 + b2 < 11 && m2 * -11 + b2 > -11) {
+                y2a = m2 * -11 + b2;
+                x2a = -11;
+            } else {
+                if (m2 > 0) {
+                    y2a = -11;
+                    x2a = (-11 - b2) / m2;
+                } else {
+                    y2a = 11;
+                    x2a = (11 - b2) / m2;
+                }
+            }
+
+            if (m1 * 11 + b1 < 11 && m1 * 11 + b1 > -11) {
+                y1b = m1 * 11 + b1;
+                x1b = 11;
+            } else {
+                if (m1 > 0) {
+                    y1b = 11;
+                    x1b = (11 - b1) / m1;
+                } else {
+                    y1b = -11;
+                    x1b = (-11 - b1) / m1;
+                }
+            }
+            if (m2 * 11 + b2 < 11 && m2 * 11 + b2 > -11) {
+                y2b = m2 * 11 + b2;
+                x2b = 11;
+            } else {
+                if (m2 > 0) {
+                    y2b = 11;
+                    x2b = (11 - b2) / m2;
+                } else {
+                    y2b = -11;
+                    x2b = (-11 - b2) / m2;
+                }
+            }
+
+            const orderedPairs = [[x1a, y1a], [x1b, y1b], [x2a, y2a], [x2b, y2b]];
+
+
+            const correctAnswer = {
+                a: a,
+                b: b,
+                c: c,
+                d: d,
+                e: e,
+                f: f
+            };
+
+
+            // Create problem content
+            problemDiv.innerHTML = `
+                <div class="problem-number">Problem ${problemNumber}</div>
+                <div class="problem-directions">
+                    Solve the system by graphing.
+                </div>
+                <div class="problem-area">
+                    <div class="math-definition">
+                        <div class="definition-line">
+                            <span class="math">
+                                <span class="math"><span class="number">${a}</span>x</span> = <span class="number"></span>y ${c > 0? '+': '-'} <span class="number">${Math.abs(c)}</span>                              
+                            </span>
+                        </div>
+                        <div class="definition-line">
+                            <span class="math">                              
+                                <span class="math"><span class="number">${d}</span>x</span> ${e > 0? '+': '-'} <span class="number">${Math.abs(e)}</span>y = <span class="number">${f}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="multiple-choice">
+                    ${generateChoices(correctAnswer, width, height, orderedPairs)}
+                </div>
+            `;
+
+            return problemDiv;
+        }
+
+        function formatFunction(a, c) {
+            let functionStr = '';
+
+            if (a === 1) {
+                functionStr = 'x²';
+            } else {
+                functionStr = `${a}x²`;
+            }
+
+            if (c > 0) {
+                functionStr += ` + ${c}`;
+            } else if (c < 0) {
+                functionStr += ` - ${Math.abs(c)}`;
+            }
+
+            return functionStr;
+        }
+
+        // Draw graph - parameters will be end points of
+
+        function drawGraph(width, height, orderedPairs) {
+            let svg = '';
+            const DOMAIN = 22
+            const RANGE = 22
+            const CENTER_X = width / 2;
+            const CENTER_Y = height / 2;
+
+            // Grid lines
+            for (let i = 0; i <= DOMAIN; i++) {
+                const x = i * width / DOMAIN;
+                svg += `<line x1="${x}" y1="0" x2="${x}" y2="${height}" stroke="#e0e0e0" stroke-width="0.5"/>`;
+
+            }
+            for (let i = 0; i <= RANGE; i++) {
+
+                const y = i * height / RANGE;
+                svg += `<line x1="0" y1="${y}" x2="${width}" y2="${y}" stroke="#e0e0e0" stroke-width="0.5"/>`;
+            }
+
+            // Axes
+            svg += `<line x1="${CENTER_X}" y1="0" x2="${CENTER_X}" y2="${height}" stroke="#333" stroke-width="1"/>`;
+            svg += `<line x1="0" y1="${CENTER_Y}" x2="${width}" y2="${CENTER_Y}" stroke="#333" stroke-width="1"/>`;
+
+            // FUTURE - change every 5 intervals to a variable.
+            // Axis labels (every 5 intervals)
+            for (let i = 0; i <= DOMAIN; i += 5) {
+                const pixel = i * width / DOMAIN + 13;
+                const value = i - DOMAIN / 2 + 1;
+                if (value !== 0) {
+
+                    svg += `<text x="${pixel-6}" y="${height/2 -2}" text-anchor="middle" font-size="8">${value}</text>`;
+                }
+            }
+            for (let i = 0; i <= DOMAIN; i += 5) {
+                const pixel = i * width / DOMAIN + 13;
+                const value = i - DOMAIN / 2 + 1;
+                if (value !== 0) {
+
+                    // svg += `<text x="${pixel}" y="145" text-anchor="middle" font-size="8">${value}</text>`;
+                    svg += `<text x="${width/2 - 6}" y="${pixel - 4}" text-anchor="middle" font-size="8">${10 - i}</text>`;
+                }
+            }
+
+            // Draw Line
+            // svg += `<line x1="100" y1="330" x2="340" y2="330" stroke="blue" stroke-width="2"/>`
+            console.log(orderedPairs[0][0]);
+            console.log(orderedPairs[0][1]);
+            console.log(orderedPairs[1][0]);
+            console.log(orderedPairs[1][1]);
+            console.log(orderedPairs[2][0]);
+            console.log(orderedPairs[2][1]);
+            console.log(orderedPairs[3][0]);
+            console.log(orderedPairs[3][1]);
+
+            svg += `<line x1="${CENTER_X + orderedPairs[0][0] * width / DOMAIN}" y1="${CENTER_Y - orderedPairs[0][1] * height / RANGE}" x2="${CENTER_X + orderedPairs[1][0] * width / DOMAIN}" y2="${CENTER_Y - orderedPairs[1][1] * height / RANGE}" stroke="#00f" stroke-width="2.1"/>`;
+            svg += `<line x1="${CENTER_X + orderedPairs[2][0] * width / DOMAIN}" y1="${CENTER_Y - orderedPairs[2][1] * height / RANGE}" x2="${CENTER_X + orderedPairs[3][0] * width / DOMAIN}" y2="${CENTER_Y - orderedPairs[3][1] * height / RANGE}" stroke="#090" stroke-width="2.1"/>`;
+
+
+            // <!-- Closed point at (2, -6) - end of first piece -->
+
+            // svg += inequalities.a ? `<circle cx="${CENTER_X + orderedPairs[0][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[0][1] * height / RANGE}" r="3" class="point" />` : `<circle cx="${CENTER_X + orderedPairs[0][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[0][1] * height / RANGE}" r="3" class="open-point" />`
+            // svg += inequalities.b ? `<circle cx="${CENTER_X + orderedPairs[1][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[0][1] * height / RANGE}" r="3" class="point" />` : `<circle cx="${CENTER_X + orderedPairs[1][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[0][1] * height / RANGE}" r="3" class="open-point" />`
+            // svg += inequalities.c ? `<circle cx="${CENTER_X + orderedPairs[1][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[1][1] * height / RANGE}" r="3" class="point" />` : `<circle cx="${CENTER_X + orderedPairs[1][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[1][1] * height / RANGE}" r="3" class="open-point" />`
+            // svg += inequalities.d ? `<circle cx="${CENTER_X + orderedPairs[2][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[2][1] * height / RANGE}" r="3" class="point" />` : `<circle cx="${CENTER_X + orderedPairs[2][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[2][1] * height / RANGE}" r="3" class="open-point" />`
+            // svg += inequalities.e ? `<circle cx="${CENTER_X + orderedPairs[3][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[3][1] * height / RANGE}" r="3" class="point" />` : `<circle cx="${CENTER_X + orderedPairs[3][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[3][1] * height / RANGE}" r="3" class="open-point" />`
+            // svg += inequalities.f ? `<circle cx="${CENTER_X + orderedPairs[4][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[4][1] * height / RANGE}" r="3" class="point" />` : `<circle cx="${CENTER_X + orderedPairs[4][0] * width / DOMAIN}" cy="${CENTER_Y - orderedPairs[4][1] * height / RANGE}" r="3" class="open-point" />`
+
+            // <!-- Open point at (2, 4) - start of second piece (not included) -->
+            // let pathData = 'M';
+
+            // svg += `<path d="${pathData}" stroke="blue" stroke-width="2" fill="none"/>`;
+
+
+            // // Draw parabola
+            // let pathData = 'M';
+            // for (let pixel = 0; pixel <= 300; pixel += 2) {
+            //     const x = (pixel / 300) * 22 - 11; // Convert pixel to x-coordinate
+            //     const y = a * x * x + c;
+            //     const yPixel = 150 - (y * 300 / 22); // Convert y to pixel, inverted
+
+            //     if (yPixel >= 0 && yPixel <= 300) {
+            //         pathData += `${pixel},${yPixel} `;
+            //     }
+            // }
+
+            // svg += `<path d="${pathData}" stroke="blue" stroke-width="2" fill="none"/>`;
+
+            return svg;
+        }
+
+        // function generateChoices() {
+        function generateChoices(correctAnswer, width, height, orderedPairs) {
+            const choices = [orderedPairs];
+            console.log(correctAnswer);
+
+            // Generate 3 incorrect answers
+            while (choices.length < 4) {
+                // Generate slopes and y-intercepts
+                const m1 = (Math.random() < 0.5 ? -1 : 1) * Math.ceil(Math.random() * 3);
+                let m2 = (Math.random() < 0.5 ? -1 : 1) * Math.ceil(Math.random() * 3);
+                while (m2 === m1) { m2 = (Math.random() < 0.5 ? -1 : 1) * Math.ceil(Math.random() * 3); }
+                const b1 = (Math.random() < 0.5 ? -1 : 1) * Math.ceil(Math.random() * 5);
+                let b2 = (Math.random() < 0.5 ? -1 : 1) * Math.ceil(Math.random() * 5);
+                while (b2 === b1) { b2 = (Math.random() < 0.5 ? -1 : 1) * Math.ceil(Math.random() * 5); }
+
+                // a(x) = b(y) + c 
+                // d(x) - e(y) = f 
+                const a = m1;
+                const b = 1;
+                const c = -b1;
+                const d = 2 * m2;
+                const e = -2;
+                const f = -2 * b2;
+
+                // Generate ordered pairs for plotting using limits of the graph (-11, 11)
+                // y1a left most end point in the graph for first equation
+                // y1b right most end point in the graph for first equation
+                // y2a left most end point in the graph for first equation
+                // y1b right most end point in the graph for first equation
+                // x1a left most end point in the graph for first equation
+                // x1b right most end point in the graph for first equation
+                // x2a left most end point in the graph for first equation
+                // x1b right most end point in the graph for first equation
+                let y1a = 0;
+                let y1b = 0;
+                let y2a = 0;
+                let y2b = 0;
+
+                if (m1 * -11 + b1 < 11 && m1 * -11 + b1 > -11) {
+                    y1a = m1 * -11 + b1;
+                    x1a = -11;
+                } else {
+                    if (m1 > 0) {
+                        y1a = -11;
+                        x1a = (-11 - b1) / m1;
+                    } else {
+                        y1a = 11;
+                        x1a = (11 - b1) / m1;
+                    }
+                }
+                if (m2 * -11 + b2 < 11 && m2 * -11 + b2 > -11) {
+                    y2a = m2 * -11 + b2;
+                    x2a = -11;
+                } else {
+                    if (m2 > 0) {
+                        y2a = -11;
+                        x2a = (-11 - b2) / m2;
+                    } else {
+                        y2a = 11;
+                        x2a = (11 - b2) / m2;
+                    }
+                }
+
+                if (m1 * 11 + b1 < 11 && m1 * 11 + b1 > -11) {
+                    y1b = m1 * 11 + b1;
+                    x1b = 11;
+                } else {
+                    if (m1 > 0) {
+                        y1b = 11;
+                        x1b = (11 - b1) / m1;
+                    } else {
+                        y1b = -11;
+                        x1b = (-11 - b1) / m1;
+                    }
+                }
+                if (m2 * 11 + b2 < 11 && m2 * 11 + b2 > -11) {
+                    y2b = m2 * 11 + b2;
+                    x2b = 11;
+                } else {
+                    if (m2 > 0) {
+                        y2b = 11;
+                        x2b = (11 - b2) / m2;
+                    } else {
+                        y2b = -11;
+                        x2b = (-11 - b2) / m2;
+                    }
+                }
+
+                const incorrect = [[x1a, y1a], [x1b, y1b], [x2a, y2a], [x2b, y2b]];
+
+
+
+                choices.push(incorrect);
+            }
+
+
+
+            // Shuffle choices
+            for (let i = choices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [choices[i], choices[j]] = [choices[j], choices[i]];
+            }
+
+            // generate HTML for each choice
+
+            let choicesHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+
+            choices.forEach((choice, index) => {
+                const formattedChoice = formatChoice(choice, width, height);
+                choicesHTML += `<div class="choice">${letters[index]}. ${formattedChoice}</div>`;
+            });
+
+            return choicesHTML;
+
+            // `<div class="choice">${letters[index]}. ${formattedChoice}</div>`
+
+            // return `<div class="choice">a. x</div>`;
+        }
+
+        function formatChoice(value, width, height) {
+            console.log(value);
+            
+
+            return `<div class="graph-container">
+                        <svg class="graph" viewBox="0 0 ${width} ${height}">
+                            ${drawGraph(width, height, value)}
+                        </svg>
+                    </div>`
+        }
+
+        // Generate initial problems
+        generateProblems();
+    </script>
+</body>
+
+</html>
